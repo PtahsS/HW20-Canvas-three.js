@@ -1,0 +1,62 @@
+<html>
+	<head>
+		<title>My first three.js app</title>
+		<style>
+			body { margin: 0; }
+			canvas { display: block; }
+		</style>
+	</head>
+	<body>
+		<script src="src/three.js"></script>
+		<script src="src/OrbitControls.js"></script>
+
+		<script>
+			const scene = new THREE.Scene();
+			const fov = 100;
+			const aspectRatio = window.innerWidth/window.innerHeight;
+			const near = 0.1;
+			const far = 1000;
+			const camera = new THREE.PerspectiveCamera( fov,aspectRatio, near, far );
+
+			const renderer = new THREE.WebGLRenderer({antialias: true});
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			renderer.setClearColor('#ccc');
+			document.body.appendChild( renderer.domElement );
+
+			const controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+			const geometry1 = new THREE.BoxGeometry(1,1,5);
+			const material1 = new THREE.MeshPhongMaterial( { color: '#55a' } );
+			const cube = new THREE.Mesh( geometry1, material1 );
+			cube.scale.set(1.2, 1.2, 1.2)
+			scene.add( cube );
+
+			const geometry2 = new THREE.ConeGeometry( 5, 6 );
+			const material2 = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+			const cone = new THREE.Mesh( geometry2, material2 );
+			scene.add( cone );
+
+			camera.position.z = 10;
+			controls.update();
+
+			const light = new THREE.DirectionalLight('#fff', 1);
+			scene.add(light);
+			light.position.set( -1, 2, 4 )
+
+			const animate = function () {
+				requestAnimationFrame( animate );
+
+				cube.rotation.x += 0.01;
+				cube.rotation.y += 0.01;
+
+				cone.rotation.x += 0.01;
+				cone.rotation.y += 0.01;
+
+				renderer.render( scene, camera );
+				controls.update();
+			};
+
+			animate();
+		</script>
+	</body>
+</html>
